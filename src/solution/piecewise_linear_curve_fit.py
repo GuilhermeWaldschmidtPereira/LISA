@@ -14,9 +14,9 @@ def check_order(mappings):
     count = 0
     for i in range(mappings.shape[0] - 1):
         if mappings[i] >= mappings[i + 1]:
-            print i, mappings[i], mappings[i + 1]
+            print(i, mappings[i], mappings[i + 1])
             count += 1
-    print '**********count =', count
+    print('**********count =', count)
 
 class PiecewiseModel:
     def __init__(self, id, sorted_mappings, sigma=100):
@@ -158,7 +158,7 @@ class PiecewiseModel:
         alphas[-1] = (self.sorted_mappings.shape[0] - 1) / (max_mapping - betas[-1])
         alphas_cumsum = np.cumsum(alphas)
         if alphas_cumsum[-1] < 0:
-            print '**************'
+            print('**************')
             alphas[-1] = -alphas_cumsum[-2]
 
         # print 'alphas =', alphas.tolist()
@@ -166,7 +166,7 @@ class PiecewiseModel:
         act_idxes = np.arange(0, self.sorted_mappings.shape[0], dtype=np_data_type())
         diff = (all_pred_idxes - act_idxes)
         # print 'all_loss =', np.sum(diff * diff)
-        print all_pred_idxes[0:100].tolist()
+        print(all_pred_idxes[0:100].tolist())
 
         return alphas
 
@@ -195,7 +195,7 @@ class PiecewiseModel:
         alphas[-1] = (self.sorted_mappings.shape[0] - 1) / (max_mapping - betas[-1])
         alphas_cumsum = np.cumsum(alphas)
         if alphas_cumsum[-1] < 0:
-            print '**************'
+            print('**************')
             alphas[-1] = -alphas_cumsum[-2]
 
         return alphas
@@ -397,8 +397,7 @@ class myThread(threading.Thread):
                 pm.train()
                 FileViewer.detect_and_create_dir(model_dir)
                 pm.save(model_dir)
-                print 'thread_id =', self.thread_id, ', model', col_id, 'has been trained'
+                print('thread_id =', self.thread_id, ', model', col_id, 'has been trained')
             except:
                 FileViewer.detect_and_delete_dir(model_dir)
-                print 'thread_id =', self.thread_id, ', model', col_id, 'encountered exception'
-
+                print('thread_id =', self.thread_id, ', model', col_id, 'encountered exception')

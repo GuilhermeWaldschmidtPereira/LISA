@@ -74,7 +74,7 @@ def bulk_loading(raw_data, temp_dir, model_dir_init):
         sigma = Config().sigma
         FileViewer.detect_and_create_dir(piecewise_params_dir)
 
-        print 'n_models =', n_models
+        print('n_models =', n_models)
         start = 0
         # for i in range(n_models - 1, 0, -1):
         for i in range(n_models):
@@ -88,7 +88,7 @@ def bulk_loading(raw_data, temp_dir, model_dir_init):
                 pm.train()
                 FileViewer.detect_and_create_dir(model_dir)
                 pm.save(model_dir)
-            print i, 'finished'
+            print(i, 'finished')
 
 
 
@@ -173,8 +173,8 @@ def lattice_regression_train(my_idx, tau, lattice_data_dir, lattice_model_dir):
 if __name__ == '__main__':
 
     Config()
-    print 'home_dir =', Config().home_dir
-    print 'data_dir =', Config().data_dir
+    print('home_dir =', Config().home_dir)
+    print('data_dir =', Config().data_dir)
     temp_dir = Config().data_dir
     raw_data = np.load(os.path.join(temp_dir, Config().static_data_name))
     model_dir_init = os.path.join(Config().models_dir, 'LISA_Init')
@@ -183,8 +183,10 @@ if __name__ == '__main__':
     query_range_strs = FileViewer.load_list(Config().query_range_path)
     query_ranges = []
     for line in query_range_strs:
-        query_ranges.append([float(i) for i in line.strip().split(' ')])
-    query_ranges = np.array(query_ranges, dtype=np_data_type())
+        if not line.startswith('#'):
+            if line.strip():
+                query_ranges.append([float(i.replace(',', '')) for i in line.strip().split(' ')])
+    query_ranges = np.array(query_ranges, dtype=np.float32)
     # query_ranges = query_ranges[0:100]
     #
     # Fig 7 & Fig 11: --------------range query on init--------------------

@@ -19,7 +19,7 @@ def get_split_points_and_idxes(x_data, N, max_value=None, type='data_partition')
         if i == N - 1:
             x_split_points.append(max_value)
             continue
-        idx = (i + 1) * (n_every_part + 1)
+        idx = int((i + 1) * (n_every_part + 1))
         split_point = x_data[idx - 1]
         x_split_points.append(split_point)
 
@@ -27,7 +27,7 @@ def get_split_points_and_idxes(x_data, N, max_value=None, type='data_partition')
         if i == N - 1:
             x_split_points.append(max_value)
             continue
-        idx = (i + 1) * n_every_part + n_remainder
+        idx = int((i + 1) * n_every_part + n_remainder)
         split_point = x_data[idx - 1]
         x_split_points.append(split_point)
 
@@ -64,7 +64,7 @@ def create_borders(split_points_list):
     all_cell_measures = np.ones(shape=[n_cells], dtype=borders.dtype)
     dim = 0
     for one_dim_split_points_list in split_points_list:
-        n_repeat = (n_cells / n_parts) / len(one_dim_split_points_list)
+        n_repeat = int((n_cells / n_parts) / len(one_dim_split_points_list))
 
         start = 0
         for split_points in one_dim_split_points_list:
@@ -73,7 +73,7 @@ def create_borders(split_points_list):
             lens = split_points - front_split_points
             one_dim_front_split_points_list = []
             one_dim_lens_list = []
-            for _ in range(n_repeat):
+            for _ in range(int(n_repeat)):
                 one_dim_front_split_points_list.append(front_split_points)
                 one_dim_lens_list.append(lens)
 
@@ -103,7 +103,7 @@ def generate_grid_cells(data, n_parts_each_dim, n_models, min_value_each_dim, ma
     partition(data, 0, 0, size, n_parts_each_dim, split_upper_bounds_list, split_idxes_list, max_value_each_dim)
 
     borders, all_cell_measures = create_borders(split_upper_bounds_list)
-    print 'borders.shape =', borders.shape
+    print('borders.shape =', borders.shape)
 
     unsorted_one_dim_data = data[:, -1]
     sorted_idxes = np.argsort(unsorted_one_dim_data)
@@ -184,7 +184,6 @@ def check_order(mappings):
     count = 0
     for i in range(mappings.shape[0] - 1):
         if mappings[i] > mappings[i + 1]:
-            print i, mappings[i], mappings[i + 1]
+            print(i, mappings[i], mappings[i + 1])
             count += 1
-    print '**********count =', count
-
+    print('**********count =', count)

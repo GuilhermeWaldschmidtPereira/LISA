@@ -10,11 +10,11 @@ from src.utils import layout_utils
 from src.utils import np_utils
 from src.FLAGS_DEFINE import *
 import time
-import cPickle
-from piecewise_linear_curve_fit import PiecewiseModel
+import _pickle as cPickle
+from src.solution.piecewise_linear_curve_fit import PiecewiseModel
 import threading
 import math
-from lattice_regression import LatticeRegression
+from src.solution.lattice_regression import LatticeRegression
 
 
 class LISA():
@@ -114,9 +114,9 @@ class LISA():
             A = PiecewiseModel.relu(np.tile(np.reshape(mappings, [-1, 1]), [1, self.sigma]) - betas.transpose())
             pred_idxes = A.dot(alphas)
 
-            print '%%%col_id =', col_id
-            print pred_idxes[idx] / self.page_size
-            print pred_idxes[idx] / self.page_size + offset
+            # print '%%%col_id =', col_id
+            # print pred_idxes[idx] / self.page_size
+            # print pred_idxes[idx] / self.page_size + offset
 
             return pred_idxes
 
@@ -173,8 +173,8 @@ class LISA():
 
             n_shards += len(entries_count)
             col_split_shard_ids.append(n_shards)
-            print 'i =', i, 'n_shards =', n_shards, 'min_pred_idx =', pred_idxes.min(), 'n_shards_this_col =', len(
-                entries_count)
+            # print 'i =', i, 'n_shards =', n_shards, 'min_pred_idx =', pred_idxes.min(), 'n_shards_this_col =', len(
+                # entries_count)
 
             entry_start_idx = start
             for e_count in entries_count:
@@ -260,7 +260,7 @@ class LISA():
         mappings = self.monotone_mappings(sorted_points)
         col_idxes = np.searchsorted(self.model_split_mappings_without_tail, mappings, side='right')
         N = col_idxes[-1]
-        print '----------------N =', N, col_idxes.max()
+        # print '----------------N =', N, col_idxes.max()
         col_split_idxes = [0] * (N + 1)
         for i in range(col_idxes.shape[0]):
             col_split_idxes[col_idxes[i]] += 1
@@ -358,7 +358,8 @@ class LISA():
             for i in range(1, n_cells):
                 # curr_id = cell_ids[i]
                 curr_low_mapping = low_mappings[i]
-                assert (curr_low_mapping >= h_m)
+                if curr_low_mapping < h_m:
+                    continue
                 if curr_low_mapping - h_m < 1e-5:
                     h_m = high_mappings[i]
                 else:
@@ -372,33 +373,36 @@ class LISA():
     @staticmethod
     def upper_bound(sorted_array, point):
         return np.clip((np.sign(point - sorted_array).astype(np.int64) + 1), a_min=0, a_max=1).sum()
+    
+    def max_column_measure(self):
+        return max(self.col_min_mappings)
 
     def predict_single_mapping_shard_id(self, mapping):
         col_idx = np.searchsorted(self.model_split_mappings_without_tail, mapping, side='right')
         # col_idx = int(mapping / self.max_column_measure)
-        print 'col_idx =', col_idx
+        # print 'col_idx =', col_idx
         trans_mapping = mapping - self.col_min_mappings[col_idx]
         shard_id_offset = self.col_split_shard_ids[col_idx]
         max_pred_idx = self.shard_numbers_each_col[col_idx] - 1
-        print 'max_pred_idx =', max_pred_idx
-        print 'shard_id_offset =', shard_id_offset
-        print 'trans_mapping =', trans_mapping
-        print self.col_split_shard_ids[col_idx + 1]
+        # print 'max_pred_idx =', max_pred_idx
+        # print 'shard_id_offset =', shard_id_offset
+        # print 'trans_mapping =', trans_mapping
+        # print self.col_split_shard_ids[col_idx + 1]
 
         alphas = self.Alphas[col_idx]
         betas = self.Betas[col_idx]
 
         pred_shard_id = min(max(int(np.sum(alphas * PiecewiseModel.relu(trans_mapping - betas)) / self.page_size), 0),
                            max_pred_idx)
-        print 'pred_Shard_id =', pred_shard_id
+        # print 'pred_Shard_id =', pred_shard_id
         pred_shard_id += shard_id_offset
         return pred_shard_id
 
     def predict_shard_ids(self, mappings, print_flag=False):
         col_idxes = np.searchsorted(self.model_split_mappings_without_tail, mappings, side='right')
-        # col_idxes = (mappings / self.max_column_measure).astype(np_idx_type()).clip(min=0,
-        #                                                                             max=self.col_min_mappings.shape[
-        #                                                                                     0] - 1)
+        col_idxes = (mappings / self.max_column_measure()).astype(np_idx_type()).clip(min=0,
+                                                                                      max=self.col_min_mappings.shape[
+                                                                                              0] - 1)
 
         trans_mappings = mappings - self.col_min_mappings[col_idxes]
 
@@ -563,7 +567,7 @@ class LISA():
             n_iters += 1
 
         radius_list = [None] * points.shape[0]
-        print '----n_iters =', n_iters
+        # print '----n_iters =', n_iters
         for i in range(n_iters):
             start = i * step
             end = start + step
@@ -580,7 +584,7 @@ class LISA():
                 # tmp = small_query_keys_list[j]
                 # print("^^^^point =", points[j])
                 # print("&&&&&tmp =", tmp)
-            print '**************', i, 'finished*******************'
+            # print '**************', i, 'finished*******************'
 
         return radius_list
 
@@ -588,7 +592,7 @@ class LISA():
         # tau = 100
         radius = (self.max_value_each_dim - self.min_value_each_dim) / tau * 2
         radius_list = self.get_radius_for_knn_query(lattice_points, radius, K)
-        print '-----lattice_points.shape =', lattice_points.shape
+        # print '-----lattice_points.shape =', lattice_points.shape
 
         while True:
             indices_list = []
@@ -604,7 +608,7 @@ class LISA():
 
             n = len(indices_list)
             next_lattice_points = np.array(next_lattice_points, dtype=np_data_type())
-            print 'next_lattice_points.shape =', next_lattice_points.shape
+            # print 'next_lattice_points.shape =', next_lattice_points.shape
             radius *= 2
             new_radius_list = self.get_radius_for_knn_query(next_lattice_points, radius, K)
             for i in range(len(new_radius_list)):
@@ -734,7 +738,7 @@ class LISA():
     def append_data_in_page(self, page, point):
         return np.r_[page, point.reshape([-1, self.data_dim])]
 
-    def split_page(self, page, point, print_flag=False):
+    # def split_page(self, page, point, print_flag=False):
         page = self.append_data_in_page(page, point)
         page_mappings = self.monotone_mappings(page)
         idxes = np.argsort(page_mappings)
@@ -804,14 +808,15 @@ class LISA():
 
         # shard_ids = self.predict_shard_ids(point_mappings)
 
-        print '--shard_ids.shape =', shard_ids.shape
+        # print '--shard_ids.shape =', shard_ids.shape
         for i in range(points.shape[0]):
             point = points[i]
             point_mapping = point_mappings[i]
             shard_id = shard_ids[i]
             self.insert_within_shard(point, point_mapping, shard_id)
             if i % 10000 == 0:
-                print i, 'finished.'
+                print('finished')
+                # print i, 'finished.'
 
     def insert_test(self, points):
         point_mappings = self.monotone_mappings(points)
@@ -851,10 +856,10 @@ class LISA():
 
             if flag == False:
                 err_count += 1
-                print 'i =', i, ', point =', points[
-                    i], ', point_mapping =', point_mapping, ', lower_bound =', lower_bound, ', upper_bound =', upper_bound
+                # print 'i =', i, ', point =', points[
+                  #  i], ', point_mapping =', point_mapping, ', lower_bound =', lower_bound, ', upper_bound =', upper_bound
 
-        print 'err_count =', err_count
+        # print 'err_count =', err_count
 
 
     def delete_record_from_page(self, page_no, point):
@@ -941,7 +946,7 @@ class LISA():
                 # try:
                 #
                 # except IndexError:
-                #     print '------point =', point, len(shard_page_nos), len(self.m_counts), shard_page_nos
+                    #print '------point =', point, len(shard_page_nos), len(self.m_counts), shard_page_nos
             elif page_idx == len(shard_page_nos) - 1:
                 max_idx = len(shard_page_nos) - 1
                 if self.m_counts[shard_page_nos[max_idx - 1]] + self.m_counts[shard_page_nos[max_idx]] <= self.page_size:
@@ -987,7 +992,7 @@ class LISA():
             if end > point_mappings.shape[0]:
                 end = point_mappings.shape[0]
             shard_ids[start:end] = self.predict_shard_ids(point_mappings[start:end])
-        print '--shard_ids.shape =', shard_ids.shape
+        # print '--shard_ids.shape =', shard_ids.shape
 
         for i in range(points.shape[0]):
             # print 'i =', i
@@ -996,7 +1001,8 @@ class LISA():
             shard_id = shard_ids[i]
             self.delete_within_shard(point, point_mapping, shard_id)
             if i % 10000 == 0:
-                print i, 'finished.'
+                # print i, 'finished.'
+                print('cabu')
 
 
     def save(self):
@@ -1012,7 +1018,7 @@ class LISA():
         np.save(page_data_path, np.concatenate(self.pages, axis=0))
         np.save(m_counts_path, np.array(self.m_counts, dtype=np_idx_type()))
 
-        print 'n_pages =', len(self.m_counts)
+        # print 'n_pages =', len(self.m_counts)
 
         meta_infos = [self.page_size, self.sigma]
         meta_infos.extend(self.col_split_shard_ids.tolist())
@@ -1022,7 +1028,7 @@ class LISA():
         np.save(col_min_mappings_path, self.col_min_mappings)
 
         shard_params = np.concatenate([self.Alphas, self.Betas], axis=0)
-        print 'shard_params.shape =', shard_params.shape
+        # print 'shard_params.shape =', shard_params.shape
         np.save(shard_params_path, shard_params)
         with open(local_models_path, 'wb') as writer:
             cPickle.dump(self.shard_infos, writer)
@@ -1055,7 +1061,7 @@ class LISA():
                     # a += 1
                 all_params.append(shard_page_nos[-1])
                 # a +=1
-        print '-------a =', a,', page_size =', len(self.m_counts)
+        # print '-------a =', a,', page_size =', len(self.m_counts)
         tmp = np.reshape(shard_params, [-1]).tolist()
         all_params.extend(tmp)
         all_params_without_addrs.extend(tmp)
@@ -1106,7 +1112,7 @@ class LISA():
             start = end
 
         self.m_counts = m_counts.tolist()
-        print 'n_pages =', len(self.m_counts)
+        # print 'n_pages =', len(self.m_counts)
 
         self.params = np.load(params_path)
         self.params_dump()
@@ -1120,14 +1126,14 @@ class LISA():
         self.cal_shard_numbers_each_col()
 
         shard_params = np.load(shard_params_path)
-        n_cols = shard_params.shape[0] / 2
+        n_cols = shard_params.shape[0] // 2
         self.Alphas = shard_params[0:n_cols]
         self.Betas = shard_params[n_cols:]
 
         with open(local_models_path, 'rb') as reader:
             self.shard_infos = cPickle.load(reader)
 
-        print 'n_shards =', len(self.shard_infos)
+        # print 'n_shards =', len(self.shard_infos)
 
         shard_ids_path = os.path.join(self.model_dir, 'shard_ids.npy')
         self.shard_ids_for_sorted_data = np.load(shard_ids_path)
@@ -1166,6 +1172,6 @@ def check_order(mappings):
     count = 0
     for i in range(mappings.shape[0] - 1):
         if mappings[i] > mappings[i + 1]:
-            print i, mappings[i], mappings[i + 1]
+            # print i, mappings[i], mappings[i + 1]
             count += 1
-    print '**********count =', count
+    # print '**********count =', count
