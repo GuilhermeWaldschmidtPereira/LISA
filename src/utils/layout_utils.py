@@ -27,7 +27,7 @@ def get_split_points_and_idxes(x_data, N, max_value=None, type='data_partition')
         if i == N - 1:
             x_split_points.append(max_value)
             continue
-        idx = int((i + 1) * n_every_part + n_remainder)
+        idx = min(int((i + 1) * n_every_part + n_remainder), x_data.shape[0])
         split_point = x_data[idx - 1]
         x_split_points.append(split_point)
 

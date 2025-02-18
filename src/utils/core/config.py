@@ -38,13 +38,26 @@ class Config(object):
             self.data_dim = 2  # The dimension of spatial data
             self.sigma = 100
             self.max_value = 10000  # max value
-            self.T_each_dim = 240  # number of parts in each dim
-            self.n_piecewise_models = 1024
+            self.T_each_dim = 240 * 5 * 10 # number of parts in each dim
+            self.n_piecewise_models = 180*5*10
             self.eta = 0.01
-            self.page_size = 113
+            self.page_size = 20*5*10
             self.min_value = 0
             self.lr = 1e-1
-            self.tau = 50  # number of nodes in each dim
+            self.tau = 100*5*10  # number of nodes in each dim
+            
+            # # params for bulk loading---2d uniform
+            # self.data_dim = 2  # The dimension of spatial data
+            # self.sigma = 100
+            # self.max_value = 10000  # max value
+            # self.T_each_dim = 240  # number of parts in each dim
+            # self.n_piecewise_models = 1024
+            # self.eta = 0.01
+            # self.page_size = 113
+            # self.min_value = 0
+            # self.lr = 1e-1
+            # self.tau = 50  # number of nodes in each dim
+
 
             data_name = str(self.data_dim) + 'd_uniform'
             self.home_dir = os.path.join(os.path.expanduser("~"), os.path.join('workspace/LISA', data_name))
@@ -63,7 +76,7 @@ class Config(object):
             self.data_to_delete_name = data_name + "_data_3.npy"  # data to delete
             self.cell_params_path = "cell_params.npy"
 
-            print '---------Config is initilized----------'
+            # print '---------Config is initilized----------'
 
     instance = None
 

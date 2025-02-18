@@ -738,7 +738,7 @@ class LISA():
     def append_data_in_page(self, page, point):
         return np.r_[page, point.reshape([-1, self.data_dim])]
 
-    # def split_page(self, page, point, print_flag=False):
+    def split_page(self, page, point, print_flag=False):
         page = self.append_data_in_page(page, point)
         page_mappings = self.monotone_mappings(page)
         idxes = np.argsort(page_mappings)
