@@ -22,31 +22,30 @@ class Config(object):
             data_dir : string, optional (default='data/')
                 directory path to store model generated data.
             """
-            # params for bulk loading---3d uniform
-            # self.data_dim = 3 # The dimension of spatial data
+            # self.data_dim = 3  # Dimensão dos dados espaciais
             # self.sigma = 100
-            # self.max_value = 10000 # max value
-            # self.T_each_dim = 90 # number of parts in each dim
-            # self.n_piecewise_models = 1024
-            # self.eta = 0.01
-            # self.page_size = 78
-            # self.min_value = 0
-            # self.lr = 1e-1
-            # self.tau = 50 # number of nodes in each dim
+            # self.max_value = 10000  # Valor máximo
+            # self.T_each_dim = 90  # Número de partições por dimensão
+            # self.n_piecewise_models = 1024  # Número de modelos de regressão por partes
+            # self.eta = 0.01  # Taxa de aprendizado para otimização
+            # self.page_size = 78  # Tamanho da página (elementos por página)
+            # self.min_value = 0  # Valor mínimo
+            # self.lr = 1e-1  # Taxa de aprendizado
+            # self.tau = 50  # Número de nós em cada dimensão
 
-            # params for bulk loading---2d uniform
-            self.data_dim = 2  # The dimension of spatial data
-            self.sigma = 100
-            self.max_value = 10000  # max value
-            self.T_each_dim = 240 * 5 * 10 # number of parts in each dim
-            self.n_piecewise_models = 180*5*10
-            self.eta = 0.01
-            self.page_size = 20*5*10
-            self.min_value = 0
-            self.lr = 1e-1
-            self.tau = 100*5*10  # number of nodes in each dim
+            # params for bulk loading---4d uniform
+            self.data_dim = 4  # Dimensão dos dados espaciais            
+            self.sigma = 10
+            self.max_value = 10000  # Valor máximo
+            self.T_each_dim = 9  # Número de partições por dimensão
+            self.n_piecewise_models = 1024  # Número de modelos de regressão por partes
+            self.eta = 0.01  # Taxa de aprendizado para otimização
+            self.page_size = 10  # Tamanho da página (elementos por página)
+            self.min_value = 0  # Valor mínimo
+            self.lr = 1e-1  # Taxa de aprendizado
+            self.tau = 500  # Número de nós em cada dimensão
             
-            # # params for bulk loading---2d uniform
+            # params for bulk loading---2d uniform
             # self.data_dim = 2  # The dimension of spatial data
             # self.sigma = 100
             # self.max_value = 10000  # max value
@@ -57,6 +56,18 @@ class Config(object):
             # self.min_value = 0
             # self.lr = 1e-1
             # self.tau = 50  # number of nodes in each dim
+            
+            #================== funfa para 100 valores ====================
+            # self.data_dim = 2  # The dimension of spatial data
+            # self.sigma = 100
+            # self.max_value = 10000  # max value
+            # self.T_each_dim = 24  # number of parts in each dim
+            # self.n_piecewise_models = 10
+            # self.eta = 0.01
+            # self.page_size = 10
+            # self.min_value = 0
+            # self.lr = 1e-1
+            # self.tau = 5 # number of nodes in each dim
 
 
             data_name = str(self.data_dim) + 'd_uniform'
