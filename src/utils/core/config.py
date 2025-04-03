@@ -38,10 +38,10 @@ class Config(object):
             self.sigma = 10
             self.max_value = 10000  # Valor máximo
             self.T_each_dim = 9  # Número de partições por dimensão
-            self.n_piecewise_models = 1024  # Número de modelos de regressão por partes
+            self.n_piecewise_models = 1  # Número de modelos de regressão por partes
             self.eta = 0.01  # Taxa de aprendizado para otimização
             self.page_size = 10  # Tamanho da página (elementos por página)
-            self.min_value = 0  # Valor mínimo
+            self.min_value = -20  # Valor mínimo
             self.lr = 1e-1  # Taxa de aprendizado
             self.tau = 500  # Número de nós em cada dimensão
             
