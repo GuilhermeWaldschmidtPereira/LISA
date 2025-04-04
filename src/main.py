@@ -205,19 +205,21 @@ if __name__ == '__main__':
     my_idx.set_model_dir(model_dir_AI)
     my_idx.save()
     total_n_pages, n_entries = my_idx.range_query(query_ranges)
-    print ('#Pages =', total_n_pages)
-
-    # Fig 9: ---------------range query on AD-----------------------
-    my_idx.set_model_dir(model_dir_AI)
-    my_idx.check_and_load_params()
-    data_to_delete = np.load(os.path.join(temp_dir, Config().data_to_delete_name))
-    my_idx.delete(data_to_delete)
-    model_dir_AD = os.path.join(Config().models_dir, 'LISA_AD')
-    my_idx.set_model_dir(model_dir_AD)
-    my_idx.save()
-    total_n_pages, n_entries = my_idx.range_query(query_ranges)
-    print ('#Pages =', total_n_pages)
     print(n_entries)
+    # print ('#Pages =', total_n_pages)
+    # print(my_idx.range_query(query_ranges))
+    # print(query_results)
+    
+    # # Fig 9: ---------------range query on AD-----------------------
+    # my_idx.set_model_dir(model_dir_AI)
+    # my_idx.check_and_load_params()
+    # data_to_delete = np.load(os.path.join(temp_dir, Config().data_to_delete_name))
+    # my_idx.delete(data_to_delete)
+    # model_dir_AD = os.path.join(Config().models_dir, 'LISA_AD')
+    # my_idx.set_model_dir(model_dir_AD)
+    # my_idx.save()
+    # total_n_pages, n_entries = my_idx.range_query(query_ranges)
+    # print ('#Pages =', total_n_pages)
     # Fig 13: --------------KNN query--------------------
     # my_idx = LISA()
     # my_idx.set_model_dir(model_dir_init)

@@ -510,6 +510,7 @@ class LISA():
 
     def range_query(self, query_ranges):
         query_page_nos = self.get_query_page_nos(query_ranges)
+        # print(self.get_query_page_nos(query_ranges))
         # print 'query_page_nos = ', query_page_nos
         n_entries_each_query = np.zeros(shape=[query_ranges.shape[0]], dtype=np_idx_type())
         n_pages_each_query = np.zeros(shape=[query_ranges.shape[0]], dtype=np_idx_type())
@@ -527,6 +528,8 @@ class LISA():
                 # query_results = query_results[self.overlap(query_results, query_ranges[i])]
                 query_results = self.overlap(query_results, query_ranges[i])
                 n_entries_each_query[i] = query_results.shape[0]
+                
+        print(query_results)
 
         return n_pages_each_query, n_entries_each_query
 
