@@ -49,7 +49,10 @@ class LISA():
         self.page_size = page_size
 
     def params_dump(self):
+        print(f"self.data_dim = {self.data_dim}")
         self.data_dim = int(self.params[-1])
+        print(f"self.data_dim = {self.data_dim}")
+        print(f"self.params[-1] = {self.params[-1]}")
         self.n_parts_each_dim = int(self.params[-2])
         self.n_piecewise_models = int(self.params[-3])
         self.max_value_each_dim = self.params[-4]
@@ -275,6 +278,7 @@ class LISA():
 
     def get_intersect_shard(self, query_range, dim, cell_idx_base, lower_measure, upper_measure, lower_mappings, upper_mappings):
         lower_val = query_range[dim]
+        print(f"dim = {dim}, self.data_dim = {self.data_dim},  dim + self.data_dim = { dim + self.data_dim}")
         upper_val = query_range[dim + self.data_dim]
         if dim == self.data_dim - 1:
             lower_measure *= self.eta

@@ -205,7 +205,8 @@ if __name__ == '__main__':
     my_idx.set_model_dir(model_dir_AI)
     my_idx.save()
     total_n_pages, n_entries = my_idx.range_query(query_ranges)
-    print(n_entries)
+    for index, value in enumerate(n_entries):
+        print(f"Index: {index}, Value: {value}")
     # print ('#Pages =', total_n_pages)
     # print(my_idx.range_query(query_ranges))
     # print(query_results)
