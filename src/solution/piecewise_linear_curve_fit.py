@@ -191,8 +191,10 @@ class PiecewiseModel:
         v = 0
         for j in range(1, self.sigma):
             v += alphas[j] * (betas[j] - betas[j - 1])
-
-        alphas[-1] = (self.sorted_mappings.shape[0] - 1) / (max_mapping - betas[-1])
+        import warnings
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=RuntimeWarning)
+            alphas[-1] = (self.sorted_mappings.shape[0] - 1) / (max_mapping - betas[-1])
         alphas_cumsum = np.cumsum(alphas)
         if alphas_cumsum[-1] < 0:
             print('**************')

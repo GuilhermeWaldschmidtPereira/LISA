@@ -15,6 +15,7 @@ from src.solution.piecewise_linear_curve_fit import PiecewiseModel
 import threading
 import math
 from src.solution.lattice_regression import LatticeRegression
+import warnings
 
 
 class LISA():
@@ -278,7 +279,8 @@ class LISA():
 
     def get_intersect_shard(self, query_range, dim, cell_idx_base, lower_measure, upper_measure, lower_mappings, upper_mappings):
         lower_val = query_range[dim]
-        print(f"dim = {dim}, self.data_dim = {self.data_dim},  dim + self.data_dim = { dim + self.data_dim}")
+        # print(f"dim = {dim}, self.data_dim = {self.data_dim},  dim + self.data_dim = { dim + self.data_dim}")
+        
         upper_val = query_range[dim + self.data_dim]
         if dim == self.data_dim - 1:
             lower_measure *= self.eta
@@ -403,10 +405,13 @@ class LISA():
         return pred_shard_id
 
     def predict_shard_ids(self, mappings, print_flag=False):
-        col_idxes = np.searchsorted(self.model_split_mappings_without_tail, mappings, side='right')
-        col_idxes = (mappings / self.max_column_measure()).astype(np_idx_type()).clip(min=0,
-                                                                                      max=self.col_min_mappings.shape[
-                                                                                              0] - 1)
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=RuntimeWarning)
+            col_idxes = np.searchsorted(self.model_split_mappings_without_tail, mappings, side='right')
+            col_idxes = (mappings / self.max_column_measure()).astype(np_idx_type()).clip(min=0, max=self.col_min_mappings.shape[0] - 1)
+
+        
+        
 
         trans_mappings = mappings - self.col_min_mappings[col_idxes]
 

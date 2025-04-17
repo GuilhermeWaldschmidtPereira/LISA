@@ -1,6 +1,6 @@
 import numpy as np
 import math
-
+import warnings
 
 def get_split_points_and_idxes(x_data, N, max_value=None, type='data_partition'):
     """
@@ -84,7 +84,9 @@ def create_borders(split_points_list):
 
             tmp = np.reshape(np.array(one_dim_lens_list).transpose(), [-1])
 
-            all_cell_measures[start:start + tmp.shape[0]] *= tmp
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore", category=RuntimeWarning)
+                all_cell_measures[start:start + tmp.shape[0]] *= tmp
             start += tmp.shape[0]
         dim += 1
 
