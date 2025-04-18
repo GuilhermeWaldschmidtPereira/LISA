@@ -3,6 +3,7 @@ import os
 import glob
 import shutil
 import subprocess
+import time
 import pandas as pd
 
 dict_ = {
@@ -12,13 +13,14 @@ dict_ = {
     'page_size': [],
     'tau': [],
     'status': [],
+    'tempo_execucao': [],
 }
 
-for sigma in range (1, 1024):
-    for T_each_dim in range (1, 1024):
-        for n_picewise_models in range(1,1024):
-            for page_size in range(1, 1024):
-                for tau in range(1, 1024):
+for sigma in range (1, 1024, 100):
+    for T_each_dim in range (1, 1024, 100):
+        for n_picewise_models in range(1,1024, 100):
+            for page_size in range(1, 1024, 100):
+                for tau in range(1, 1024, 100):
                     dict_['sigma'].append(sigma)
                     dict_['T_each_dim'].append(T_each_dim)
                     dict_['n_picewise_models'].append(n_picewise_models)
@@ -137,7 +139,11 @@ class Config(object):
                     print("Arquivo salvo com sucesso!")
 
 
+                    start_time = time.time()
                     result = subprocess.run(["python3", "../src/main.py"], capture_output=True, text=True)
+                    end_time = time.time()
+                    execution_time = end_time - start_time
+                    dict_['tempo_execucao'].append(execution_time)
                     print("Saída padrão:", result.stdout)
                     print("Erro padrão:", result.stderr)
                     
