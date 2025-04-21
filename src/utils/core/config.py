@@ -12,16 +12,28 @@ class Config(object):
 
         def __init__(self):
 
-            self.data_dim = 768  # The dimension of spatial data   
-            self.sigma = 301
+            # self.data_dim = 768  # The dimension of spatial data   
+            # self.sigma = 1
+            # self.max_value = 10000  # Valor máximo
+            # self.T_each_dim = 1  # Número de partições por dimensão
+            # self.n_piecewise_models = 1  # Número de modelos de regressão por partes
+            # self.eta = 0.01  # Taxa de aprendizado para otimização
+            # self.page_size = 901   # Tamanho da página (elementos por página)
+            # self.min_value = 0  # Valor mínimo
+            # self.lr = 1e-1  # Taxa de aprendizado
+            # self.tau = 901   # Número de nós em cada dimensão
+
+            # # params for bulk loading---4d uniform
+            self.data_dim = 4  # Dimensão dos dados espaciais            
+            self.sigma = 10
             self.max_value = 10000  # Valor máximo
-            self.T_each_dim = 101  # Número de partições por dimensão
-            self.n_piecewise_models = 501  # Número de modelos de regressão por partes
+            self.T_each_dim = 9  # Número de partições por dimensão
+            self.n_piecewise_models = 1  # Número de modelos de regressão por partes
             self.eta = 0.01  # Taxa de aprendizado para otimização
-            self.page_size = 101   # Tamanho da página (elementos por página)
-            self.min_value = 0  # Valor mínimo
+            self.page_size = 10  # Tamanho da página (elementos por página)
+            self.min_value = -20  # Valor mínimo
             self.lr = 1e-1  # Taxa de aprendizado
-            self.tau = 701   # Número de nós em cada dimensão
+            self.tau = 500  # Número de nós em cada dimensão
 
             data_name = str(self.data_dim) + 'd_uniform'
             self.home_dir = os.path.join(os.path.expanduser("~"), os.path.join('workspace/LISA', data_name))
