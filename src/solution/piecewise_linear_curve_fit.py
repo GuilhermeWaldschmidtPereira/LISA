@@ -349,7 +349,7 @@ class PiecewiseModel:
     @staticmethod
     def check_if_alphas_and_betas_valid(alphas, betas):
         betas_diff = betas[1:] - betas[0:-1]
-        flag = (betas_diff.min() > 0)
+        flag = (betas_diff.size > 0 and betas_diff.min() > 0)
 
         if flag == False:
             return flag
