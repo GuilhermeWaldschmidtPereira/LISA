@@ -1,2 +1,2 @@
-sigma,T_each_dim,n_picewise_models,page_size,tau,status
-1,1,1,1,1,Erro
+sigma,T_each_dim,n_picewise_models,page_size,tau,status,tempo_execucao
+1,1,1,1,1,Sucesso,0.42754316329956055

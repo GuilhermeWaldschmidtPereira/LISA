@@ -16,11 +16,11 @@ dict_ = {
     'tempo_execucao': [],
 }
 
-for sigma in range (1, 1024, 100):
-    for T_each_dim in range (1, 1024, 100):
-        for n_picewise_models in range(1,1024, 100):
-            for page_size in range(1, 1024, 100):
-                for tau in range(1, 1024, 100):
+for sigma in range (1, 1024, 1024):
+    for T_each_dim in range (1, 1024, 1024):
+        for n_picewise_models in range(1,1024, 1024):
+            for page_size in range(1, 1024, 1024):
+                for tau in range(1, 1024, 1024):
                     dict_['sigma'].append(sigma)
                     dict_['T_each_dim'].append(T_each_dim)
                     dict_['n_picewise_models'].append(n_picewise_models)

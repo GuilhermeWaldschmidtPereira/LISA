@@ -189,24 +189,24 @@ if __name__ == '__main__':
     query_ranges = np.array(query_ranges, dtype=np.float32)
     query_ranges = query_ranges[0:100]
     
-    # Fig 7 & Fig 11: --------------range query on init--------------------
-    my_idx = LISA()
-    my_idx.set_model_dir(model_dir_init)
-    flag = my_idx.check_and_load_params()
-    assert (flag == True)
-    total_n_pages, n_entries = my_idx.range_query(query_ranges)
+    # # Fig 7 & Fig 11: --------------range query on init--------------------
+    # my_idx = LISA()
+    # my_idx.set_model_dir(model_dir_init)
+    # flag = my_idx.check_and_load_params()
+    # assert (flag == True)
+    # total_n_pages, n_entries = my_idx.range_query(query_ranges)
 
-    # Fig 8 & Fig 12: --------------range query on AI-----------------------
-    my_idx.set_model_dir(model_dir_init)
-    my_idx.check_and_load_params()
-    data_to_insert = np.load(os.path.join(temp_dir, Config().data_to_insert_name))
-    my_idx.insert(data_to_insert)
-    model_dir_AI = os.path.join(Config().models_dir, 'LISA_AI')
-    my_idx.set_model_dir(model_dir_AI)
-    my_idx.save()
-    total_n_pages, n_entries = my_idx.range_query(query_ranges)
-    for index, value in enumerate(n_entries):
-        print(f"Index: {index}, Value: {value}")
+    # # Fig 8 & Fig 12: --------------range query on AI-----------------------
+    # my_idx.set_model_dir(model_dir_init)
+    # my_idx.check_and_load_params()
+    # data_to_insert = np.load(os.path.join(temp_dir, Config().data_to_insert_name))
+    # my_idx.insert(data_to_insert)
+    # model_dir_AI = os.path.join(Config().models_dir, 'LISA_AI')
+    # my_idx.set_model_dir(model_dir_AI)
+    # my_idx.save()
+    # total_n_pages, n_entries = my_idx.range_query(query_ranges)
+    # for index, value in enumerate(n_entries):
+    #     print(f"Index: {index}, Value: {value}")
     # print ('#Pages =', total_n_pages)
     # print(my_idx.range_query(query_ranges))
     # print(query_results)
@@ -222,23 +222,23 @@ if __name__ == '__main__':
     # total_n_pages, n_entries = my_idx.range_query(query_ranges)
     # print ('#Pages =', total_n_pages)
     # Fig 13: --------------KNN query--------------------
-    # my_idx = LISA()
-    # my_idx.set_model_dir(model_dir_init)
-    # my_idx.check_and_load_params()
+    my_idx = LISA()
+    my_idx.set_model_dir(model_dir_init)
+    my_idx.check_and_load_params()
 
-    # tau = Config().tau
-    # lattice_data_dir = os.path.join(Config().data_dir, 'lattice')
-    # lattice_data_dir = os.path.join(lattice_data_dir, str(tau))
-    # lattice_model_dir = os.path.join(Config().models_dir, 'lattice_regression')
-    # lattice_model_dir = os.path.join(lattice_model_dir, str(tau))
+    tau = Config().tau
+    lattice_data_dir = os.path.join(Config().data_dir, 'lattice')
+    lattice_data_dir = os.path.join(lattice_data_dir, str(tau))
+    lattice_model_dir = os.path.join(Config().models_dir, 'lattice_regression')
+    lattice_model_dir = os.path.join(lattice_model_dir, str(tau))
 
-    # lattice_regression_train(my_idx, tau, lattice_data_dir, lattice_model_dir)
-    # my_idx.load_knn_model(lattice_model_dir)
+    lattice_regression_train(my_idx, tau, lattice_data_dir, lattice_model_dir)
+    my_idx.load_knn_model(lattice_model_dir)
 
-    # knn_testing_points_path = os.path.join(lattice_data_dir, 'testing_points.npy')
-    # query_centers = np.load(knn_testing_points_path)
-    # query_centers = query_centers[0:1000]
+    knn_testing_points_path = os.path.join(lattice_data_dir, 'testing_points.npy')
+    query_centers = np.load(knn_testing_points_path)
+    query_centers = query_centers[0:6]
 
-    # K = 3
-    # queried_keys = my_idx.knn_query(query_centers, K)
-    # # print(query_ranges)
+    K = 6
+    queried_keys = my_idx.knn_query(query_centers, K)
+    print(queried_keys)

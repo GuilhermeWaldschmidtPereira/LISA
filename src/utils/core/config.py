@@ -18,10 +18,10 @@ class Config(object):
             self.T_each_dim = 1  # Número de partições por dimensão
             self.n_piecewise_models = 1  # Número de modelos de regressão por partes
             self.eta = 0.01  # Taxa de aprendizado para otimização
-            self.page_size = 201   # Tamanho da página (elementos por página)
+            self.page_size = 1   # Tamanho da página (elementos por página)
             self.min_value = -0.8  # Valor mínimo
             self.lr = 1e-1  # Taxa de aprendizado
-            self.tau = 101   # Número de nós em cada dimensão
+            self.tau = 1   # Número de nós em cada dimensão
 
             data_name = str(self.data_dim) + 'd_uniform'
             self.home_dir = os.path.join(os.path.expanduser("~"), os.path.join('workspace/LISA', data_name))

@@ -7,6 +7,7 @@ from src.FLAGS_DEFINE import *
 
 def cartesian_product(arrays):
     la = len(arrays)
+    print(la)
     dtype = arrays[0].dtype
     arr = np.empty([len(a) for a in arrays] + [la], dtype=dtype)
     for i, a in enumerate(np.ix_(*arrays)):
